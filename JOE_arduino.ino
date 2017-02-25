@@ -1,33 +1,43 @@
+#include <Servo.h>
 
-const int leftButtonPin = 12;     // the number of the pushbutton pin
-const int rightButtonPin = 11;     // the number of the pushbutton pin
+// Buttons
+const int leftButtonPin = 12;
+const int rightButtonPin = 11;
 
-const int ledPin = 13;
-
-// variables will change:
-int leftButtonState = 0;         // variable for reading the pushbutton status
-int rightButtonState = 0;         // variable for reading the pushbutton status
+int leftButtonState = 0;
+int rightButtonState = 0;
 
 int leftLastButtonState = 0;
 int rightLastButtonState = 0;
 
+// Servos
+Servo servos[9];
+int noOfServos = 9;
+
 void setup() {
   Serial.begin(9600);
+  
   // initialize the pushbutton pin as an input:
   pinMode(leftButtonPin, INPUT_PULLUP);
   pinMode(rightButtonPin, INPUT_PULLUP);
-  pinMode(ledPin, OUTPUT);
+
+  // Attach servos to pin 2-11
+  for(int i = 0; i < noOfServos; i++) {
+    servos[i].attach(i+2);
+  }
+  
 }
 
 void loop() {
 
+  // Get info from Joe
   if (Serial.available() > 0) { 
-    // GET INFO
     char input = Serial.parseInt();
-    if(input == 4) {
-      digitalWrite(ledPin, HIGH);
-    }
-    delay(10);
+    // Test that input is within servo range
+    if(input < 0 || input > noOfServos) return;
+    servos[input].write(180);
+    delay(1000);
+    servos[input].write(0);
   }
 
   // SEND INFO
