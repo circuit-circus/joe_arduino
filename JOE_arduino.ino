@@ -10,6 +10,11 @@ int rightButtonState = 0;
 int leftLastButtonState = 0;
 int rightLastButtonState = 0;
 
+unsigned long leftLastDebounceTime = 0;
+unsigned long rightLastDebounceTime = 0;
+unsigned long debounceDelay = 50;
+
+
 // Servos
 Servo servos[9];
 int noOfServos = 9;
@@ -65,23 +70,45 @@ void loop() {
   }
 
   // SEND INFO
-  leftButtonState = digitalRead(leftButtonPin);
-  rightButtonState = digitalRead(rightButtonPin);
+  int leftButtonReading = digitalRead(leftButtonPin);
+  int rightButtonReading= digitalRead(rightButtonPin);
 
-  if (leftButtonState != leftLastButtonState) {
-    if(leftButtonState == LOW) {
-      Serial.println("L");
-    }
-    delay(10);
+  // If the switch changed, due to noise or pressing, reset the debouncing timer
+  if (leftButtonReading != leftLastButtonState) {
+    leftLastDebounceTime = millis();
   }
 
-  if (rightButtonState != rightLastButtonState) {
-    if(rightButtonState == LOW) {
-      Serial.println("R");
-    }
-    delay(10);
+  if (rightButtonReading != rightLastButtonState) {
+    rightLastDebounceTime = millis();
   }
 
-  leftLastButtonState = leftButtonState;
-  rightLastButtonState = rightButtonState;
+
+  // Whatever the reading is at, it's been there for longer than the debounce delay, so take it as the actual current state
+  if ((millis() - leftLastDebounceTime) > debounceDelay) {
+    // If the button state has changed:
+    if (leftButtonReading != leftButtonState) {
+      leftButtonState = leftButtonReading;
+
+      // only toggle the LED if the new button state is LOW
+      if(leftButtonState == LOW) {
+        Serial.println("L");
+      }
+    }
+  }
+
+  if ((millis() - rightLastDebounceTime) > debounceDelay) {
+    if (rightButtonReading != rightButtonState) {
+      rightButtonState = rightButtonReading;
+
+      if(rightButtonState == LOW) {
+        Serial.println("R");
+      }
+    }
+  }
+
+  // Save the reading.
+  leftLastButtonState = leftButtonReading;
+  rightLastButtonState = rightButtonReading;
+
+
 }
