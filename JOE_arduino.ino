@@ -2,7 +2,7 @@
 
 // Buttons
 const int leftButtonPin = 12;
-const int rightButtonPin = 13;
+const int rightButtonPin = 11;
 
 int leftButtonState = 0;
 int rightButtonState = 0;
