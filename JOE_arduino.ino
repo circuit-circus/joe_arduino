@@ -42,7 +42,7 @@ void loop() {
     int input = readInput.toInt();
     
     // Test that input is within servo range
-    if(input < 0 || input > 5) return;
+    if(input < 1 || input > 9) return;
     
     servos[input].write(180);
     delay(1000);
@@ -52,19 +52,9 @@ void loop() {
     // Drink 2, 4, 5 need milk
     switch (input) {
       case 2:
-        servos[6].write(180);
+        servos[3].write(180);
         delay(1000);
-        servos[6].write(0);
-        break;
-      case 4:
-        servos[7].write(180);
-        delay(1000);
-        servos[7].write(0);
-        break;
-      case 5:
-        servos[8].write(180);
-        delay(1000);
-        servos[8].write(0);
+        servos[3].write(0);
         break;
     }    
   }
