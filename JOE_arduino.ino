@@ -42,7 +42,7 @@ void loop() {
     int input = readInput.toInt();
     
     // Test that input is within servo range
-    if(input < 1 || input > 9) return;
+    if(input < 1 || input > 11) return;
     
     servos[input].write(180);
     delay(1000);
