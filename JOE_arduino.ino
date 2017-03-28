@@ -43,18 +43,21 @@ void loop() {
     
     // Test that input is within servo range
     if(input < 1 || input > 9) return;
-    
-    servos[input].write(180);
-    delay(1000);
-    servos[input].write(0);
-    delay(1000);
+
+    delay(500);
+    servos[input-2].write(180);
+    delay(2000);
+    servos[input-2].write(0);
+    delay(2000);
     
     // Drink 2, 4, 5 need milk
     switch (input) {
       case 2:
-        servos[3].write(180);
-        delay(1000);
-        servos[3].write(0);
+        //Serial.println("C");
+        servos[1].write(180);
+        delay(2000);
+        servos[1].write(0);
+        delay(2000);
         break;
     }    
   }
